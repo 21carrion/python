@@ -1,9 +1,10 @@
-import time
 from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 def test_session_storage_auth():
     driver = webdriver.Chrome()
+    wait = WebDriverWait(driver, 10)
 
     user1_cookie_name = "SESSION"
     user1_cookie_value = "M2ZjMzA5MzAtOWQ2OS00ODg0LThlZTctZTJlYmRkYWE2NDE5"
@@ -22,10 +23,8 @@ def test_session_storage_auth():
     })
 
     driver.refresh()
-    time.sleep(1)
 
-    driver.get(user1_profile_url)
-    time.sleep(2)
+    wait.until(lambda d: d.current_url == user1_profile_url)
     url_user1 = driver.current_url
 
     driver.delete_all_cookies()
@@ -37,10 +36,8 @@ def test_session_storage_auth():
     })
 
     driver.refresh()
-    time.sleep(1)
 
-    driver.get(user2_profile_url)
-    time.sleep(2)
+    wait.until(lambda d: d.current_url == user2_profile_url)
     url_user2 = driver.current_url
 
     assert url_user1 != url_user2
